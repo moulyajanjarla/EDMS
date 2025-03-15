@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh './mvnw clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './mvnw test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'scp target/demo.jar user@your-server:/deploy'
+                sh 'ssh user@your-server "systemctl restart edms-service"'
+            }
+        }
+    }
+}
